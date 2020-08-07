@@ -1,0 +1,36 @@
+{
+  "name": "neurosity-macos",
+  "version": "1.0.0",
+  "description": "Integrate the Neurosity headset with macOS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neurosity/neurosity-macos.git"
+  },
+  "keywords": [
+    "macos",
+    "bci",
+    "neurosity",
+    "flow",
+    "calm"
+  ],
+  "author": "Alex Castillo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neurosity/neurosity-macos/issues"
+  },
+  "homepage": "https://github.com/neurosity/neurosity-macos#readme",
+  "devDependencies": {
+    "electron": "^9.1.2"
+  },
+  "dependencies": {
+    "@magicdawn/ascii-progress": "^1.0.8",
+    "@neurosity/notion": "^5.0.0-rc.7",
+    "node-html-to-image": "^3.0.1",
+    "rxjs": "^6.6.2",
+    "yargs": "^15.4.1"
+  }
+}
