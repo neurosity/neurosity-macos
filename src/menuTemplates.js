@@ -112,6 +112,13 @@ function getAuthenticatedMenu(loginWindow) {
       label: "Apps",
       submenu: apps
     },
+    {
+      id: "docs",
+      label: "Docs",
+      click: () => {
+        shell.openExternal("https://docs.neurosity.co");
+      }
+    },
     separator,
     {
       id: "logout",
