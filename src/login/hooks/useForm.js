@@ -1,4 +1,4 @@
-import { useState } from "../../web_modules/preact/hooks.js";
+import { useState } from "../../../web_modules/preact/hooks.js";
 
 export const useForm = (defaultValues, callback) => {
   const [values, set] = useState(defaultValues);

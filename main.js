@@ -27,7 +27,7 @@ app.on("ready", async () => {
     }
   });
 
-  loginWindow.loadFile("./src/login.html");
+  loginWindow.loadFile("./src/login/login.html");
 
   loginWindow.on("close", (e) => {
     e.preventDefault();

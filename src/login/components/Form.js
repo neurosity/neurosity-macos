@@ -1,6 +1,9 @@
-import { createElement } from "../../web_modules/preact.js";
-import { useState, useEffect } from "../../web_modules/preact/hooks.js";
-import htm from "../../web_modules/htm.js";
+import { createElement } from "../../../web_modules/preact.js";
+import {
+  useState,
+  useEffect
+} from "../../../web_modules/preact/hooks.js";
+import htm from "../../../web_modules/htm.js";
 const { ipcRenderer, remote } = require("electron");
 
 import { useForm } from "../hooks/useForm.js";
