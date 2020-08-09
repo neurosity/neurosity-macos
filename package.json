@@ -4,7 +4,8 @@
   "description": "Integrate the Neurosity headset with macOS",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "prepare": "pika-web"
   },
   "repository": {
     "type": "git",
@@ -24,13 +25,22 @@
   },
   "homepage": "https://github.com/neurosity/neurosity-macos#readme",
   "devDependencies": {
-    "electron": "^9.1.2"
+    "@pika/web": "^0.6.1"
   },
   "dependencies": {
+    "electron": "^9.1.2",
     "@magicdawn/ascii-progress": "^1.0.8",
     "@neurosity/notion": "^5.0.0-rc.7",
+    "htm": "^3.0.4",
     "node-html-to-image": "^3.0.1",
-    "rxjs": "^6.6.2",
-    "yargs": "^15.4.1"
+    "preact": "^10.4.7",
+    "rxjs": "^6.6.2"
+  },
+  "@pika/web": {
+    "webDependencies": [
+      "htm",
+      "preact",
+      "preact/hooks"
+    ]
   }
 }

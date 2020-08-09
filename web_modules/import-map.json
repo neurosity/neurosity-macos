@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "htm": "./htm.js",
+    "preact": "./preact.js",
+    "preact/hooks": "./preact/hooks.js"
+  }
+}

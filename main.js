@@ -1,5 +1,5 @@
 const { Notion } = require("@neurosity/notion");
-const { Tray, app } = require("electron");
+const { Tray, BrowserWindow, ipcMain, app } = require("electron");
 const { BehaviorSubject } = require("rxjs");
 const { withLatestFrom, share } = require("rxjs/operators");
 const { switchMap, flatMap, filter } = require("rxjs/operators");
@@ -7,113 +7,98 @@ const { getIcon, defaultIcon } = require("./src/icon");
 const { averageScoreBuffer } = require("./src/utils");
 const { ReactiveTrayMenu } = require("./src/menu");
 const { streamReady } = require("./src/status");
-const { argv } = require("yargs");
+const {
+  getLoginMenu,
+  getAuthenticatedMenu
+} = require("./src/menuTemplates");
 
 let tray = null;
+let loginWindow = null;
 const notion = new Notion();
 const selectedMetric = new BehaviorSubject(null);
-const { email, password } = argv;
 
 app.on("ready", async () => {
   tray = new Tray(defaultIcon);
   tray.setToolTip("Neurosity macOS");
 
-  const menu = new ReactiveTrayMenu(tray, getInitialMenu());
+  loginWindow = new BrowserWindow({
+    width: 400,
+    height: 600,
+    show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  loginWindow.loadFile("./src/login.html");
+
+  loginWindow.on("close", (e) => {
+    e.preventDefault();
+    loginWindow.hide();
+  });
+
+  const menu = new ReactiveTrayMenu(tray, getLoginMenu(loginWindow));
 
   // hack metric checkbox to work as radios since it's buggy
   tray.on("click", () => {
     menu.setSelectedMetric(selectedMetric.getValue());
   });
 
-  if (!email || !password) {
-    return console.error("Please login by passing email and password.");
-  }
+  app.on("window-all-closed", (e) => e.preventDefault());
 
-  const { selectedDevice } = await notion.login({ email, password });
-
-  const devices = await notion.getDevices();
-
-  menu.setDevices(devices, selectedDevice, notion);
-
-  notion.onDeviceChange().subscribe((device) => {
-    menu.setSelectedDevice(device);
+  ipcMain.on("login-submit", (event, credentials) => {
+    notion
+      .login(credentials)
+      .then(() => {
+        event.reply("login-response", { ok: true });
+      })
+      .catch((error) => {
+        event.reply("login-response", {
+          ok: false,
+          error: error.message
+        });
+      });
   });
 
-  const status$ = notion.status().pipe(share());
-
-  status$.subscribe((status) => {
-    menu.setStatus(status);
-  });
-
-  // updates tray icon with selected metric
-  selectedMetric
-    .asObservable()
-    .pipe(
-      filter((selectedMetric) => !!selectedMetric),
-      switchMap((selectedMetric) =>
-        notion[selectedMetric]().pipe(averageScoreBuffer())
-      ),
-      flatMap((score) => getIcon({ score })), // to icon
-      withLatestFrom(status$)
-    )
-    .subscribe(([iconWithMetric, status]) => {
-      if (streamReady(status)) {
-        tray.setImage(iconWithMetric);
-      } else {
-        tray.setImage(defaultIcon);
-      }
-    });
-});
-
-function getInitialMenu() {
-  return [
-    {
-      id: "selectedDevice",
-      enabled: false,
-      label: "Loggin in..."
-    },
-    {
-      id: "status",
-      enabled: false,
-      label: "Status"
-    },
-    {
-      id: "battery",
-      enabled: false,
-      label: "Battery"
-    },
-    { type: "separator" },
-    {
-      id: "focus",
-      label: "Show Focus",
-      type: "checkbox",
-      checked: false,
-      click: (item) => {
-        selectedMetric.next(item.checked ? "focus" : null);
-      }
-    },
-    {
-      id: "calm",
-      label: "Show Calm",
-      type: "checkbox",
-      checked: false,
-      click: (item) => {
-        selectedMetric.next(item.checked ? "calm" : null);
-      }
-    },
-    { type: "separator" },
-    {
-      id: "myDevices",
-      label: "My Devices",
-      submenu: [{ label: "loading... ", enabled: false }]
-    },
-    { type: "separator" },
-    {
-      id: "quit",
-      label: "Quit",
-      click: () => {
-        app.quit();
-      }
+  notion.onAuthStateChanged().subscribe(async (auth) => {
+    if (!auth) {
+      return;
     }
-  ];
-}
+
+    menu.setState(() => getAuthenticatedMenu(selectedMetric));
+
+    const { selectedDevice } = auth;
+    const devices = await notion.getDevices();
+
+    menu.setDevices(devices, selectedDevice, notion);
+
+    notion.onDeviceChange().subscribe((device) => {
+      menu.setSelectedDevice(device);
+    });
+
+    const status$ = notion.status().pipe(share());
+
+    status$.subscribe((status) => {
+      menu.setStatus(status);
+    });
+
+    // updates tray icon with selected metric
+    selectedMetric
+      .asObservable()
+      .pipe(
+        filter((selectedMetric) => !!selectedMetric),
+        switchMap((selectedMetric) =>
+          notion[selectedMetric]().pipe(averageScoreBuffer())
+        ),
+        flatMap((score) => getIcon({ score })), // to icon
+        withLatestFrom(status$)
+      )
+      .subscribe(([iconWithMetric, status]) => {
+        if (streamReady(status)) {
+          tray.setImage(iconWithMetric);
+        } else {
+          tray.setImage(defaultIcon);
+        }
+      });
+  });
+});

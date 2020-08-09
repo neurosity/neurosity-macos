@@ -1,13 +1,13 @@
 # 🤯 Neurosity macOS
 
-Conenct your Neurosity device to macOS
+Connect your Neurosity device to macOS
 
 > 💡 You'll need a [Neurosity account](https://console.neurosity.co)
 
 ## Getting Started
 
 ```
-npm start -- --email=NEUROSITY_EMAIL --password=NEUROSITY_PASSWORD
+npm start
 ```
 
 ## Features
@@ -17,6 +17,7 @@ npm start -- --email=NEUROSITY_EMAIL --password=NEUROSITY_PASSWORD
 - ✅ My Device
 - 🔗 Device Status
 - ⚡ Device Battery
+- 🔒 Login
 
 ## Docs
 
@@ -24,7 +25,6 @@ npm start -- --email=NEUROSITY_EMAIL --password=NEUROSITY_PASSWORD
 
 ## Roadmap
 
-- 🔒 Add login window
 - 📊 Signal Quality
 - ⚙️ Device Settings
 
