@@ -1,15 +1,14 @@
 const { notion, selectedMetric } = require("./src/notion");
+const { persistAuth, reviveAuth } = require("./src/auth");
 const { Tray, BrowserWindow, ipcMain, app } = require("electron");
-const { withLatestFrom, share } = require("rxjs/operators");
 const { switchMap, flatMap, filter } = require("rxjs/operators");
+const { withLatestFrom, share } = require("rxjs/operators");
 const { getIcon, defaultIcon } = require("./src/icon");
+const { getAuthenticatedMenu } = require("./src/menuTemplates");
 const { averageScoreBuffer } = require("./src/utils");
 const { ReactiveTrayMenu } = require("./src/menu");
+const { getLoginMenu } = require("./src/menuTemplates");
 const { streamReady } = require("./src/status");
-const {
-  getLoginMenu,
-  getAuthenticatedMenu
-} = require("./src/menuTemplates");
 
 let tray = null;
 let loginWindow = null;
@@ -17,6 +16,8 @@ let loginWindow = null;
 app.on("ready", async () => {
   tray = new Tray(defaultIcon);
   tray.setToolTip("Neurosity macOS");
+
+  reviveAuth();
 
   loginWindow = new BrowserWindow({
     width: 400,
@@ -52,6 +53,7 @@ app.on("ready", async () => {
       .login(credentials)
       .then(() => {
         event.reply("login-response", { ok: true });
+        persistAuth();
       })
       .catch((error) => {
         event.reply("login-response", {

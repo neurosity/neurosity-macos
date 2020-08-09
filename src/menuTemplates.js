@@ -1,5 +1,6 @@
-const { app, ipcMain } = require("electron");
+const { app } = require("electron");
 const { notion, selectedMetric } = require("./notion");
+const { deleteAuth } = require("./auth");
 
 const quitMenuItem = {
   id: "quit",
@@ -76,6 +77,7 @@ function getAuthenticatedMenu(loginWindow) {
       click: () => {
         notion.logout().then(() => {
           loginWindow.webContents.send("logout");
+          deleteAuth();
         });
       }
     },
