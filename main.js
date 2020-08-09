@@ -43,6 +43,10 @@ app.on("ready", async () => {
 
   app.on("window-all-closed", (e) => e.preventDefault());
 
+  ipcMain.on("open-tray-menu", () => {
+    tray.popUpContextMenu();
+  });
+
   ipcMain.on("login-submit", (event, credentials) => {
     notion
       .login(credentials)

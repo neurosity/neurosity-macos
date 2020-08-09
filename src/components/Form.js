@@ -42,8 +42,9 @@ export function Form() {
     });
   }
 
-  function closeWindow() {
+  function openApp() {
     const window = remote.getCurrentWindow();
+    ipcRenderer.send("open-tray-menu");
     window.close();
   }
 
@@ -51,7 +52,8 @@ export function Form() {
     return html`
       <div class="message">
         <h3>You are now logged in.</h3>
-        <button onClick=${closeWindow}>Close</button>
+        <br />
+        <button class="button" onClick=${openApp}>Open App</button>
       </div>
     `;
   }
