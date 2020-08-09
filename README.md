@@ -17,7 +17,7 @@ npm start
 - ✅ My Device
 - 🔗 Device Status
 - ⚡ Device Battery
-- 🔒 Login
+- 🔒 Login UI
 
 ## Docs
 
