@@ -62,7 +62,7 @@ class ReactiveTrayMenu {
       const item = menu.find((item) => item.id === "deviceInfo");
 
       item.submenu = Object.entries(info).map(([key, value]) => ({
-        id: `${key}-${value}`,
+        id: `info-${key}`,
         label: `${key}: ${value}`,
         enabled: false
       }));
@@ -86,6 +86,26 @@ class ReactiveTrayMenu {
         }
         return item;
       });
+    });
+  }
+
+  setDeviceSettings(settings) {
+    this.setState((menu) => {
+      const item = menu.find((item) => item.id === "deviceSettings");
+
+      item.submenu = Object.entries(settings).map(([key, checked]) => ({
+        id: `setting-${key}`,
+        type: "checkbox",
+        label: key,
+        checked,
+        click: (item) => {
+          notion.changeSettings({
+            [key]: item.checked
+          });
+        }
+      }));
+
+      return menu;
     });
   }
 

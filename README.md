@@ -14,8 +14,8 @@ npm start
 
 - 🧘🏽‍♀️ Show Calm score
 - 🧠 Show Focus score
-- ✅ My Device
 - ℹ️ Device Info
+- ⚙️ Device Settings
 - 🔗 Device Status
 - ⚡ Device Battery
 - 🔒 Login UI
@@ -28,7 +28,6 @@ npm start
 ## Roadmap
 
 - 📊 Signal Quality
-- ⚙️ Device Settings
 
 ## MIT License
 

@@ -82,6 +82,11 @@ function getAuthenticatedMenu(loginWindow) {
       label: "Info",
       submenu: [{ label: "loading... ", enabled: false }]
     },
+    {
+      id: "deviceSettings",
+      label: "Settings",
+      submenu: [{ label: "loading... ", enabled: false }]
+    },
     separator,
     {
       id: "focus",

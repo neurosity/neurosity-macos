@@ -108,4 +108,8 @@ app.on("ready", async () => {
         }
       });
   });
+
+  notion.settings().subscribe((settings) => {
+    menu.setDeviceSettings(settings);
+  });
 });
