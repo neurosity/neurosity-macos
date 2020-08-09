@@ -1,4 +1,4 @@
-const { app } = require("electron");
+const { app, shell } = require("electron");
 const { notion, selectedMetric } = require("./notion");
 const { deleteAuth } = require("./auth");
 
@@ -11,6 +11,39 @@ const quitMenuItem = {
 };
 
 const separator = { type: "separator" };
+
+const apps = [
+  {
+    id: "dev-console",
+    label: "Developer Console",
+    click: () => {
+      shell.openExternal("https://console.neurosity.co");
+    }
+  },
+  {
+    id: "vscode-extension",
+    label: "Developer Assistant",
+    click: () => {
+      shell.openExternal(
+        "https://marketplace.visualstudio.com/items?itemName=neurosity.plugin-vscode-notion"
+      );
+    }
+  },
+  {
+    id: "notion-ocean",
+    label: "Notion Ocean",
+    click: () => {
+      shell.openExternal("https://ocean.neurosity.co");
+    }
+  },
+  {
+    id: "think-to-scroll",
+    label: "Think to Scroll",
+    click: () => {
+      shell.openExternal("https://thinktoscroll.com");
+    }
+  }
+];
 
 function getLoginMenu(loginWindow) {
   return [
@@ -68,6 +101,11 @@ function getAuthenticatedMenu(loginWindow) {
       id: "myDevices",
       label: "My Devices",
       submenu: [{ label: "loading... ", enabled: false }]
+    },
+    {
+      id: "apps",
+      label: "Apps",
+      submenu: apps
     },
     separator,
     {
