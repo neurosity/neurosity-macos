@@ -2,6 +2,7 @@ const { Menu } = require("electron");
 const { BehaviorSubject } = require("rxjs");
 const { statesLabels } = require("./status");
 const { notion } = require("./notion");
+const { settingsLabels } = require("./settings");
 
 class ReactiveTrayMenu {
   constructor(tray, initialState) {
@@ -96,7 +97,7 @@ class ReactiveTrayMenu {
       item.submenu = Object.entries(settings).map(([key, checked]) => ({
         id: `setting-${key}`,
         type: "checkbox",
-        label: key,
+        label: key in settingsLabels ? settingsLabels[key] : key,
         checked,
         click: (item) => {
           notion.changeSettings({
