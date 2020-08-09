@@ -18,9 +18,14 @@ export const useForm = (defaultValues, callback) => {
     }));
   };
 
+  const reset = () => {
+    set(defaultValues);
+  };
+
   return {
     onChange,
     onSubmit,
+    reset,
     values
   };
 };

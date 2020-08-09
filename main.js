@@ -1,6 +1,5 @@
-const { Notion } = require("@neurosity/notion");
+const { notion, selectedMetric } = require("./src/notion");
 const { Tray, BrowserWindow, ipcMain, app } = require("electron");
-const { BehaviorSubject } = require("rxjs");
 const { withLatestFrom, share } = require("rxjs/operators");
 const { switchMap, flatMap, filter } = require("rxjs/operators");
 const { getIcon, defaultIcon } = require("./src/icon");
@@ -14,8 +13,6 @@ const {
 
 let tray = null;
 let loginWindow = null;
-const notion = new Notion();
-const selectedMetric = new BehaviorSubject(null);
 
 app.on("ready", async () => {
   tray = new Tray(defaultIcon);
@@ -62,15 +59,16 @@ app.on("ready", async () => {
 
   notion.onAuthStateChanged().subscribe(async (auth) => {
     if (!auth) {
+      menu.setState(() => getLoginMenu(loginWindow));
       return;
     }
 
-    menu.setState(() => getAuthenticatedMenu(selectedMetric));
+    menu.setState(() => getAuthenticatedMenu(loginWindow));
 
     const { selectedDevice } = auth;
     const devices = await notion.getDevices();
 
-    menu.setDevices(devices, selectedDevice, notion);
+    menu.setDevices(devices, selectedDevice);
 
     notion.onDeviceChange().subscribe((device) => {
       menu.setSelectedDevice(device);

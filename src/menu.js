@@ -1,6 +1,7 @@
 const { Menu } = require("electron");
 const { BehaviorSubject } = require("rxjs");
 const { statesLabels } = require("./status");
+const { notion } = require("./notion");
 
 class ReactiveTrayMenu {
   constructor(tray, initialState) {
@@ -38,7 +39,7 @@ class ReactiveTrayMenu {
     });
   }
 
-  setDevices(devices, selectedDevice, notion) {
+  setDevices(devices, selectedDevice) {
     this.setState((menu) => {
       const item = menu.find((item) => item.id === "myDevices");
 

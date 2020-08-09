@@ -1,4 +1,5 @@
-const { app } = require("electron");
+const { app, ipcMain } = require("electron");
+const { notion, selectedMetric } = require("./notion");
 
 const quitMenuItem = {
   id: "quit",
@@ -25,7 +26,7 @@ function getLoginMenu(loginWindow) {
   ];
 }
 
-function getAuthenticatedMenu(selectedMetric) {
+function getAuthenticatedMenu(loginWindow) {
   return [
     {
       id: "selectedDevice",
@@ -68,6 +69,16 @@ function getAuthenticatedMenu(selectedMetric) {
       submenu: [{ label: "loading... ", enabled: false }]
     },
     separator,
+    {
+      id: "logout",
+      enabled: true,
+      label: "Logout",
+      click: () => {
+        notion.logout().then(() => {
+          loginWindow.webContents.send("logout");
+        });
+      }
+    },
     quitMenuItem
   ];
 }

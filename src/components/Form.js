@@ -1,5 +1,5 @@
 import { createElement } from "../../web_modules/preact.js";
-import { useState } from "../../web_modules/preact/hooks.js";
+import { useState, useEffect } from "../../web_modules/preact/hooks.js";
 import htm from "../../web_modules/htm.js";
 const { ipcRenderer, remote } = require("electron");
 
@@ -20,6 +20,12 @@ export function Form() {
   const [error, setError] = useState("");
   const disabled = loggingIn;
 
+  useEffect(() => {
+    ipcRenderer.on("logout", () => {
+      setLoggedIn(false);
+    });
+  }, []);
+
   async function onSubmit() {
     setError("");
     setLoggingIn(true);
@@ -29,6 +35,7 @@ export function Form() {
       setLoggingIn(false);
       if (response.ok) {
         setLoggedIn(true);
+        form.reset();
       } else {
         setError(response.error);
       }
