@@ -57,6 +57,20 @@ class ReactiveTrayMenu {
     });
   }
 
+  setDeviceInfo(info) {
+    this.setState((menu) => {
+      const item = menu.find((item) => item.id === "deviceInfo");
+
+      item.submenu = Object.entries(info).map(([key, value]) => ({
+        id: `${key}-${value}`,
+        label: `${key}: ${value}`,
+        enabled: false
+      }));
+
+      return menu;
+    });
+  }
+
   setStatus(status) {
     this.setState((menu) => {
       return menu.map((item) => {

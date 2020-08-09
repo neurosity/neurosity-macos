@@ -78,6 +78,9 @@ app.on("ready", async () => {
 
     notion.onDeviceChange().subscribe((device) => {
       menu.setSelectedDevice(device);
+      notion.getInfo().then((info) => {
+        menu.setDeviceInfo(info);
+      });
     });
 
     const status$ = notion.status().pipe(share());
