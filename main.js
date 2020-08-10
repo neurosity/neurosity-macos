@@ -42,8 +42,6 @@ app.on("ready", async () => {
     menu.setSelectedMetric(selectedMetric.getValue());
   });
 
-  app.on("window-all-closed", (e) => e.preventDefault());
-
   ipcMain.on("open-tray-menu", () => {
     tray.popUpContextMenu();
   });

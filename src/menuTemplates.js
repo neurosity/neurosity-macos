@@ -1,14 +1,6 @@
-const { app, shell } = require("electron");
+const { shell } = require("electron");
 const { notion, selectedMetric } = require("./notion");
 const { deleteAuth } = require("./auth");
-
-const quitMenuItem = {
-  id: "quit",
-  label: "Quit",
-  click: () => {
-    app.quit();
-  }
-};
 
 const separator = { type: "separator" };
 
@@ -56,7 +48,13 @@ function getLoginMenu(loginWindow) {
       }
     },
     separator,
-    quitMenuItem
+    {
+      id: "quit",
+      label: "Quit",
+      click: () => {
+        loginWindow.destroy();
+      }
+    }
   ];
 }
 
@@ -136,7 +134,13 @@ function getAuthenticatedMenu(loginWindow) {
         });
       }
     },
-    quitMenuItem
+    {
+      id: "quit",
+      label: "Quit",
+      click: () => {
+        loginWindow.destroy();
+      }
+    }
   ];
 }
 
