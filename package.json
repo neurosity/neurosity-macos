@@ -36,7 +36,8 @@
     "htm": "^3.0.4",
     "node-html-to-image": "^3.0.1",
     "preact": "^10.4.7",
-    "rxjs": "^6.6.2"
+    "rxjs": "^6.6.2",
+    "systray": "^1.0.5"
   },
   "@pika/web": {
     "webDependencies": [
