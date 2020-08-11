@@ -30,6 +30,7 @@
   "dependencies": {
     "@magicdawn/ascii-progress": "^1.0.8",
     "@neurosity/notion": "^5.0.0-rc.7",
+    "@sindresorhus/do-not-disturb": "^1.1.0",
     "electron": "^9.1.2",
     "electron-store": "^6.0.0",
     "htm": "^3.0.4",

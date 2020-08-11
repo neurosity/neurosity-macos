@@ -1,6 +1,8 @@
 const { shell } = require("electron");
-const { notion, selectedMetric } = require("./notion");
+const { notion } = require("./notion");
 const { deleteAuth } = require("./auth");
+const { selectedMetric } = require("./selectedMetric");
+const { doNotDisturbSubject } = require("./doNotDisturb");
 
 const separator = { type: "separator" };
 
@@ -104,6 +106,30 @@ function getAuthenticatedMenu(loginWindow) {
         selectedMetric.next(item.checked ? "calm" : null);
       }
     },
+    // {
+    //   id: "doNotDisturb",
+    //   label: "Do not disturb",
+    //   submenu: [
+    //     {
+    //       label: "While I'm in the zone",
+    //       type: "radio",
+    //       checked: false,
+    //       click: (item) => {
+    //         doNotDisturbSubject.next(
+    //           item.checked ? "whileInTheZone" : "off"
+    //         );
+    //       }
+    //     },
+    //     {
+    //       label: "For 1 hour",
+    //       type: "radio",
+    //       checked: false,
+    //       click: (item) => {
+    //         doNotDisturbSubject.next(item.checked ? "for1Hour" : "off");
+    //       }
+    //     }
+    //   ]
+    // },
     separator,
     {
       id: "myDevices",

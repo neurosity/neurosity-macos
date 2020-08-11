@@ -27,6 +27,7 @@ npm start
 
 ## Roadmap
 
+- 🌙 Do not disturb mode
 - 📊 Signal Quality
 
 ## MIT License

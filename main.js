@@ -1,12 +1,14 @@
-const { notion, selectedMetric } = require("./src/notion");
+const { notion } = require("./src/notion");
+const { flatMap } = require("rxjs/operators");
 const { persistAuth, reviveAuth } = require("./src/auth");
 const { Tray, BrowserWindow, ipcMain, app } = require("electron");
-const { switchMap, flatMap, filter } = require("rxjs/operators");
 const { withLatestFrom, share } = require("rxjs/operators");
+const { selectedMetricScore$ } = require("./src/selectedMetric");
 const { getIcon, defaultIcon } = require("./src/icon");
 const { getAuthenticatedMenu } = require("./src/menuTemplates");
-const { averageScoreBuffer } = require("./src/utils");
 const { ReactiveTrayMenu } = require("./src/menu");
+const { syncDoToDisturb } = require("./src/doNotDisturb");
+const { selectedMetric } = require("./src/selectedMetric");
 const { getLoginMenu } = require("./src/menuTemplates");
 const { streamReady } = require("./src/status");
 
@@ -88,13 +90,8 @@ app.on("ready", async () => {
     });
 
     // updates tray icon with selected metric
-    selectedMetric
-      .asObservable()
+    selectedMetricScore$
       .pipe(
-        filter((selectedMetric) => !!selectedMetric),
-        switchMap((selectedMetric) =>
-          notion[selectedMetric]().pipe(averageScoreBuffer())
-        ),
         flatMap((score) => getIcon({ score })), // to icon
         withLatestFrom(status$)
       )
@@ -110,4 +107,6 @@ app.on("ready", async () => {
   notion.settings().subscribe((settings) => {
     menu.setDeviceSettings(settings);
   });
+
+  syncDoToDisturb();
 });
