@@ -15,6 +15,13 @@ const apps = [
     }
   },
   {
+    id: "music",
+    label: "Neurosity Music",
+    click: () => {
+      shell.openExternal("https://music.neurosity.co");
+    }
+  },
+  {
     id: "vscode-extension",
     label: "Developer Assistant",
     click: () => {
