@@ -12,6 +12,9 @@ const { selectedMetric } = require("./src/selectedMetric");
 const { getLoginMenu } = require("./src/menuTemplates");
 const { streamReady } = require("./src/status");
 
+const path = require("path");
+const isDev = require("electron-is-dev");
+
 let tray = null;
 let loginWindow = null;
 
@@ -26,11 +29,17 @@ app.on("ready", async () => {
     height: 600,
     show: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
     }
   });
 
-  loginWindow.loadFile("./src/login/login.html");
+  loginWindow.loadURL(
+    isDev
+      ? `file://${path.join(__dirname, "src/login/login.html")}`
+      : `file://${path.join(__dirname, "build/src/login/login.html")}`
+  );
 
   loginWindow.on("close", (e) => {
     e.preventDefault();

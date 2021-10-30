@@ -4,7 +4,7 @@ import {
   useEffect
 } from "../../../web_modules/preact/hooks.js";
 import htm from "../../../web_modules/htm.js";
-const { ipcRenderer, remote } = require("electron");
+const { ipcRenderer, remote } = window.require("electron");
 
 import { useForm } from "../hooks/useForm.js";
 
