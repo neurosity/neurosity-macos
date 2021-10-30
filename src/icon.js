@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 
 const icon = fs.readFileSync(
-  path.join(__dirname, "..", "images", "icon-neurosity@2x.png")
+  path.join(__dirname, "..", "images", "icon-neurosity-Template@2x.png")
 );
 
 const iconDataURI =
@@ -14,7 +14,7 @@ const defaultIcon = path.join(
   __dirname,
   "..",
   "images",
-  "icon-neurosity.png"
+  "icon-neurosity-Template.png"
 );
 
 async function getIcon(dynamicContent = {}) {
