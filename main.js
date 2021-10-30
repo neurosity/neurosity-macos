@@ -11,6 +11,7 @@ const { syncDoToDisturb } = require("./src/doNotDisturb");
 const { selectedMetric } = require("./src/selectedMetric");
 const { getLoginMenu } = require("./src/menuTemplates");
 const { streamReady } = require("./src/status");
+const { onThemeUpdated } = require("./src/nativeTheme");
 
 const path = require("path");
 const isDev = require("electron-is-dev");
@@ -100,11 +101,10 @@ app.on("ready", async () => {
 
     // updates tray icon with selected metric
     selectedMetricScore$
-      .pipe(
-        flatMap((score) => getIcon({ score })), // to icon
-        withLatestFrom(status$)
-      )
-      .subscribe(([iconWithMetric, status]) => {
+      .pipe(withLatestFrom(status$, onThemeUpdated()))
+      .subscribe(async ([score, status, theme]) => {
+        const iconWithMetric = await getIcon({ score, theme });
+
         if (streamReady(status)) {
           tray.setImage(iconWithMetric);
         } else {

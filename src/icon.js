@@ -40,6 +40,9 @@ async function getIcon(dynamicContent = {}) {
   const image = nativeImage.createFromBuffer(imageBuffer, {
     scaleFactor: 2
   });
+
+  image.setTemplateImage(true);
+  
   return image;
 }
 
