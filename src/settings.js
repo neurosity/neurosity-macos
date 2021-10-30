@@ -3,7 +3,9 @@ const settingsLabels = {
   lsl: "Lab Streaming Layer (LSL)",
   osc: "Open Sound Control (OSC)",
   supportAccess: "Support Access",
-  researchProgram: "Research Program"
+  researchProgram: "Research Program",
+  hapticsSystem: "System Haptics",
+  ble: "Bluetooth"
 };
 
 module.exports = { settingsLabels };
