@@ -8,17 +8,35 @@ const separator = { type: "separator" };
 
 const apps = [
   {
-    id: "dev-console",
-    label: "Developer Console",
-    click: () => {
-      shell.openExternal("https://console.neurosity.co");
-    }
+    id: "shift",
+    label: "Neurosity Shift",
+    submenu: [
+      {
+        label: "On the App Store",
+        click: () => {
+          shell.openExternal("https://apps.apple.com/au/app/neurosity/id1538516914");
+        }
+      },
+      {
+        label: "On Google Play",
+        click: () => {
+          shell.openExternal("https://play.google.com/store/apps/details?id=com.neurosity");
+        }
+      }
+    ]
   },
   {
     id: "music",
     label: "Neurosity Music",
     click: () => {
       shell.openExternal("https://music.neurosity.co");
+    }
+  },
+  {
+    id: "dev-console",
+    label: "Developer Console",
+    click: () => {
+      shell.openExternal("https://console.neurosity.co");
     }
   },
   {
