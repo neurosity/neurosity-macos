@@ -1,15 +1,21 @@
-const { BehaviorSubject } = require("rxjs");
-const { filter, switchMap, share } = require("rxjs/operators");
+const { BehaviorSubject, of, NEVER } = require("rxjs");
+const { switchMap, share, distinctUntilChanged } = require("rxjs/operators");
 const { averageScoreBuffer } = require("./utils");
 const { notion } = require("./notion");
 
 const selectedMetric = new BehaviorSubject(null);
 
 const selectedMetricScore$ = selectedMetric.asObservable().pipe(
-  filter((selectedMetric) => !!selectedMetric),
-  switchMap((selectedMetric) =>
-    notion[selectedMetric]().pipe(averageScoreBuffer())
-  ),
+  switchMap((selectedMetric) => {
+    if (!selectedMetric) {
+      return of(NEVER);
+    }
+
+    return notion[selectedMetric]().pipe(
+      averageScoreBuffer()
+    )
+  }),
+  distinctUntilChanged(),
   share()
 );
 

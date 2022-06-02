@@ -1,17 +1,18 @@
 const { notion } = require("./src/notion");
-const { flatMap } = require("rxjs/operators");
 const { persistAuth, reviveAuth } = require("./src/auth");
 const { Tray, BrowserWindow, ipcMain, app } = require("electron");
-const { withLatestFrom, share } = require("rxjs/operators");
+const { withLatestFrom, share, tap } = require("rxjs/operators");
 const { selectedMetricScore$ } = require("./src/selectedMetric");
 const { getIcon, defaultIcon } = require("./src/icon");
 const { getAuthenticatedMenu } = require("./src/menuTemplates");
 const { ReactiveTrayMenu } = require("./src/menu");
-const { syncDoToDisturb } = require("./src/doNotDisturb");
+const {
+  syncDoToDisturb,
+  doNotDisturbCheckbox$
+} = require("./src/doNotDisturb");
 const { selectedMetric } = require("./src/selectedMetric");
 const { getLoginMenu } = require("./src/menuTemplates");
 const { streamReady } = require("./src/status");
-const { onThemeUpdated } = require("./src/nativeTheme");
 
 const path = require("path");
 const isDev = require("electron-is-dev");
@@ -101,9 +102,14 @@ app.on("ready", async () => {
 
     // updates tray icon with selected metric
     selectedMetricScore$
-      .pipe(withLatestFrom(status$, onThemeUpdated()))
-      .subscribe(async ([score, status, theme]) => {
-        const iconWithMetric = await getIcon({ score, theme });
+      .pipe(
+        withLatestFrom(status$),
+        tap(([score, status]) => {
+          console.log("selectedMetricScore$", { score, status });
+        })
+      )
+      .subscribe(async ([score, status]) => {
+        const iconWithMetric = await getIcon({ score });
 
         if (streamReady(status)) {
           tray.setImage(iconWithMetric);
@@ -117,5 +123,9 @@ app.on("ready", async () => {
     menu.setDeviceSettings(settings);
   });
 
-  syncDoToDisturb();
+  // syncDoToDisturb();
+
+  // doNotDisturbCheckbox$.subscribe((enabled) => {
+  //   menu.setDoNotDisturb(enabled);
+  // });
 });

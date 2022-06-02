@@ -111,10 +111,23 @@ class ReactiveTrayMenu {
   }
 
   setSelectedMetric(metric) {
+    const metrics = ["focus", "calm"];
+
     this.setState((menu) => {
       return menu.map((item) => {
-        if ("type" in item && item.type === "checkbox") {
+        if ("type" in item && item.type === "checkbox" && metrics.includes(item.id)) {
           item.checked = metric ? metric === item.id : false;
+        }
+        return item;
+      });
+    });
+  }
+
+  setDoNotDisturb(checked) {
+    this.setState((menu) => {
+      return menu.map((item) => {
+        if (item.id === "doNotDisturb") {
+          item.checked = checked;
         }
         return item;
       });

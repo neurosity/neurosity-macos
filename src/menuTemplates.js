@@ -2,7 +2,7 @@ const { shell } = require("electron");
 const { notion } = require("./notion");
 const { deleteAuth } = require("./auth");
 const { selectedMetric } = require("./selectedMetric");
-const { doNotDisturbSubject } = require("./doNotDisturb");
+const { doNotDisturbCheckboxSubject } = require("./doNotDisturb");
 
 const separator = { type: "separator" };
 
@@ -133,27 +133,12 @@ function getAuthenticatedMenu(loginWindow) {
     },
     // {
     //   id: "doNotDisturb",
-    //   label: "Do not disturb",
-    //   submenu: [
-    //     {
-    //       label: "While I'm in the zone",
-    //       type: "radio",
-    //       checked: false,
-    //       click: (item) => {
-    //         doNotDisturbSubject.next(
-    //           item.checked ? "whileInTheZone" : "off"
-    //         );
-    //       }
-    //     },
-    //     {
-    //       label: "For 1 hour",
-    //       type: "radio",
-    //       checked: false,
-    //       click: (item) => {
-    //         doNotDisturbSubject.next(item.checked ? "for1Hour" : "off");
-    //       }
-    //     }
-    //   ]
+    //   label: "Do not disturb when I'm focused",
+    //   type: "checkbox",
+    //   checked: false,
+    //   click: (item) => {
+    //     doNotDisturbCheckboxSubject.next(item.checked);
+    //   }
     // },
     separator,
     {
